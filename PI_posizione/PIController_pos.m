@@ -36,7 +36,8 @@ classdef PIController_pos < handle
         function u = computeControlAction(obj,reference,y_feedabck)
             error = reference-y_feedabck;
             %FORMULA ALGORITMO DI  VELOCITA'
-            u_now = obj.u_past+obj.Kp.*(1+((obj.Ki.*obj.st).*error)-obj.e_past);
+            u_now = obj.u_past+obj.Kp.*((1+(obj.Ki*obj.st))*error-obj.e_past);
+            %u_now = obj.u_past+obj.Kp.*(error-obj.e_past);
             obj.e_past = error;
             obj.u_past = u_now;
             u = u_now;

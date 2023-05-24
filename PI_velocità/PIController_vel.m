@@ -1,9 +1,10 @@
-classdef PIController_vel < BaseController 
+classdef PIController_vel < handle
     %'controllore del secondo loop solo P
     properties
-        Kp 
-        e_past
-        u_past
+        st
+        Kp         
+        u_past %valore dell'azione di controllo nell'istante precedente
+        e_past %valore dell'errore passato
     end
     
     methods
@@ -13,7 +14,7 @@ classdef PIController_vel < BaseController
             assert(isscalar(Kp));
             assert(Kp>=0);
            
-            obj@BaseController(st);
+            obj.st=st;
             obj.Kp = Kp;
 
 
@@ -24,12 +25,17 @@ classdef PIController_vel < BaseController
         end
 
         function obj = starting(obj)
-
+            obj.e_past = 0;
+            obj.u_past = 0;
         end
 
-        function u =  computeControlActionDis(obj,reference,y_feedback)   
+        function u =  computeControlAction(obj,reference,y_feedback)   
             error = reference - y_feedback;
-            u = obj.Kp * error;
+            u_now = obj.u_past+obj.Kp.*(error);
+            %u = obj.Kp * error;
+            obj.e_past = error;
+            obj.u_past = u_now;
+            u = u_now;
         end    
     end
 end
