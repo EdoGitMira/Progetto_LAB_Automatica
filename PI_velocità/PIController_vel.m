@@ -31,7 +31,7 @@ classdef PIController_vel < handle
 
         function u =  computeControlAction(obj,reference,y_feedback)   
             error = reference - y_feedback;
-            u_now = obj.u_past+obj.Kp.*(error);
+            u_now = obj.Kp.*(error);
             %u = obj.Kp * error;
             obj.e_past = error;
             obj.u_past = u_now;
