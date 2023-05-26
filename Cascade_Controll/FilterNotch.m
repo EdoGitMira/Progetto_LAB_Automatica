@@ -1,7 +1,7 @@
-classdef FilterFirstOrder < handle
-    %FILTERFIRSTORDER classe per l'impementazione del filtro del primo.
+classdef FilterNotch < handle
+    %FILTERNOTCH classe per l'impementazione del filtro notch.
     % nella forma di :
-    % 1/(1+s*Tf)
+    % (s^2+2*xci_z*wn*s+wn^2)/(s^2+2*xci_p*wn*s+wn^2);
     %
     %una volta chiamato il filtro richiamare la funzione discretizzazione
     %se serve il filtro in z 
@@ -11,7 +11,9 @@ classdef FilterFirstOrder < handle
     
     properties (Access = private) 
         St %tempo di campionamento
-        Tf %tau del filtro
+        wn %omega del filtro
+        xci_z %per rendere il filtro più o meno selettivo
+        xci_p %per rendere il filtro più o meno selettivo
         UinPast %valori precedenti in ingresso al filtro
         UoutPast %valori prededenti del filtro in uscita
         Fs %filtro in continua
@@ -20,21 +22,30 @@ classdef FilterFirstOrder < handle
         B %vettore parametri per discretizzazione rispetto a u
     end
     
-    methods
+    properties
         
+    end
+    
+    methods
         %metodo per l'inizializzazione della classe dove creiemi il filtro
         %in constinua
-        function obj = FilterFirstOrder(Tf,St)
+        function obj = FilterNotch(w,xc_z,xc_p,St)
             %check input
-            assert(isscalar(Tf));
-            assert(Tf>0);
+            assert(isscalar(w));
+            assert(w>0);
+            assert(isscalar(xc_z));
+            assert(xc_z>0);
+            assert(isscalar(xc_p));
+            assert(xc_p>0);
             assert(isscalar(St));
             assert(St>0);
-            %------------
-            obj.Tf = Tf;
+            %----------
+            obj.wn = w;
+            obj.xci_z=xc_z; 
+            obj.xci_p=xc_p;
             obj.St = St;
-            s  = tf('s');
-            obj.Fs = 1/(1+s*obj.Tf);
+            s=tf('s');
+            obj.Fs =(s^2+2*obj.xci_z*obj.wn*s+obj.wn^2)/(s^2+2*obj.xci_p*obj.wn*s+obj.wn^2);
         end
         
         %funzione di starting dove si setta il valore iniziale del filtro
@@ -42,6 +53,13 @@ classdef FilterFirstOrder < handle
         function obj = Starting(obj)
             obj.UoutPast = ones(length(obj.A),1)*dcgain(obj.Fs);
             obj.UinPast = zeros(length(obj.B),1)*dcgain(obj.Fs);
+        end
+        
+        %funzione di inizializzazione dove si setta il valore iniziale del filtro
+        %che viene posto pari al valore di guadagno 
+        function obj = Initialize(obj)
+            obj.UoutPast = zeros(length(obj.A),1);
+            obj.UinPast = zeros(length(obj.B),1);
         end
         
         %funzione per la discretizzazione del filtro nella traformata z e
@@ -61,9 +79,19 @@ classdef FilterFirstOrder < handle
             obj.B = numC0d; % incressi precedenti
         end
         
-        %funzione per ritornare la funzione di trasferimento in s
-        function out = TF(obj)
-            out  = obj.Tf;
+        %funzione per ritornare wn
+        function out = Wn(obj)
+            out  = obj.Wn;
+        end 
+        
+        %funzione per ritornare il valore del polo 
+        function out = Xp(obj)
+            out  = obj.xci_p;
+        end 
+        
+        %funzione per ritornare il valore dello zero 
+        function out = Xz(obj)
+            out  = obj.xci_z;
         end 
         
         %funzione per ritornare la funzione di trasferimento in s
@@ -75,7 +103,7 @@ classdef FilterFirstOrder < handle
         function out = TransferFunctionD(obj)
             out  = obj.Fd;
         end 
-     
+        
         %funzione per il calcolo del 'uscita del filtro che viene calcolata
         %con il valore passato di reference e considerando i valori passati
         %diingresso e uscita del filtro
@@ -97,6 +125,7 @@ classdef FilterFirstOrder < handle
             %scrittura dell'uscita attuale calcolata
             out = outcalc;
         end
+        
     end
 end
 

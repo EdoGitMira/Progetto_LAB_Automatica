@@ -29,35 +29,35 @@ classdef PIController_pos < BaseController
         end
         
         %inizializzazione dei valori passati
-        function obj = initialize(obj)
+        function obj = Initialize(obj)
             obj.u_past = 0;
             obj.e_past = 0;
         end
         
         %funzione per return di Ki
-        function out = valKi(obj)
+        function out = ValKi(obj)
             out = obj.Ki;
         end
         
         %funzione per return di Kp
-        function out = valKp(obj)
+        function out = ValKp(obj)
             out = obj.Kp;
         end
         
         %funzione per il settaggio del valore di e_past con un valore
         %passato alla funzione
-        function obj = setErrPast(obj,err_set)
+        function obj = SetErrPast(obj,err_set)
             obj.e_past = err_set;
         end
         
         %funzione per il settaggio del valore di u_past con un valore
         %passato alla funzione
-        function obj = setUPast(obj,u_set)
+        function obj = SetUPast(obj,u_set)
             obj.u_past = u_set;
         end
         
         %funzione per inizializzare i valori del pi di posozione
-        function obj = starting(obj,reference,y_feedback,uinitial)
+        function obj = Starting(obj,reference,y_feedback,uinitial)
             % verifico correttezza degli ingressi.
             % si richiede che reference,y e u siano scalari
             assert(isscalar(reference));
@@ -77,7 +77,7 @@ classdef PIController_pos < BaseController
         %funzione per il calcolo della azione di controllo del controllore
         %implementato con il metodo di implementazione digitale mediante
         %l'utilizzo dell'algoritmo di velocità.
-        function u = computeControlAction(obj,reference,y_feedabck)
+        function u = ComputeControlAction(obj,reference,y_feedabck)
             error = reference-y_feedabck;
             %FORMULA ALGORITMO DI  VELOCITA'
             u_now = obj.u_past+obj.Kp.*((1+(obj.Ki*obj.st))*error-obj.e_past);

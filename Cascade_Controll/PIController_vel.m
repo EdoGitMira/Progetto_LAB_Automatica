@@ -22,7 +22,7 @@ classdef PIController_vel < BaseController
 
         end
         
-        function obj = initialize(obj)
+        function obj = Initialize(obj)
 
         end
 
@@ -31,7 +31,7 @@ classdef PIController_vel < BaseController
             %obj.u_past = 0;
         end
 
-        function u =  computeControlAction(obj,reference,y_feedback)   
+        function u =  ComputeControlAction(obj,reference,y_feedback)   
             error = reference - y_feedback;
             u_now = obj.Kp.*(error);
             %obj.e_past = error;

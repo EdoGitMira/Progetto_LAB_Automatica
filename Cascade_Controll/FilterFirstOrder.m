@@ -39,6 +39,13 @@ classdef FilterFirstOrder < handle
         
         %funzione di starting dove si setta il valore iniziale del filtro
         %che viene posto pari al valore di guadagno 
+        function obj = Initialize(obj)
+            obj.UoutPast = zeros(length(obj.A),1);
+            obj.UinPast = zeros(length(obj.B),1);
+        end
+        
+        %funzione di starting dove si setta il valore iniziale del filtro
+        %che viene posto pari al valore di guadagno 
         function obj = Starting(obj)
             obj.UoutPast = ones(length(obj.A),1)*dcgain(obj.Fs);
             obj.UinPast = zeros(length(obj.B),1)*dcgain(obj.Fs);
