@@ -39,6 +39,16 @@ classdef PIController_pos < BaseController
             out = obj.Ki;
         end
         
+        %funzione per return di e_past
+        function out = valE_past(obj)
+            out = obj.e_past;
+        end
+        
+        %funzione per return di e_past
+        function out = valU_past(obj)
+            out = obj.u_past;
+        end
+        
         %funzione per return di Kp
         function out = valKp(obj)
             out = obj.Kp;

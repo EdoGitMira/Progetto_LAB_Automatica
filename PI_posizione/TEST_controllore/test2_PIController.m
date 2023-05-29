@@ -1,4 +1,4 @@
-clear all;clc;close all
+ clear all;clc;close all
 % COMPARE WITH TRANSFER FUNCTION - OPEN LOOP
 addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_posizione')
 

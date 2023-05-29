@@ -1,4 +1,8 @@
 classdef PIController_pos < BaseController
+%PIController_pos => classe di implementazione di un controllore PI
+%per il controllo di posizione all'interno di un cascade control
+%per il modello discreto è stata utilizzata l'implementazione digitale
+%utilizzando un algoritmo di velocità
 
 
     properties (Access = private)
@@ -77,8 +81,11 @@ classdef PIController_pos < BaseController
         %funzione per il calcolo della azione di controllo del controllore
         %implementato con il metodo di implementazione digitale mediante
         %l'utilizzo dell'algoritmo di velocità.
-        function u = ComputeControlAction(obj,reference,y_feedabck)
-            error = reference-y_feedabck;
+        function u = ComputeControlAction(obj,reference,y_feedback)
+            assert(isscalar(reference));
+            assert(isscalar(y_feedback));
+            
+            error = reference-y_feedback;
             %FORMULA ALGORITMO DI  VELOCITA'
             u_now = obj.u_past+obj.Kp.*((1+(obj.Ki*obj.st))*error-obj.e_past);
             obj.e_past = error;
@@ -94,6 +101,32 @@ classdef PIController_pos < BaseController
             obj.u_past = u_now;
             u = u_now;
             
+        end
+        
+        function u = ComputeControlActionDis2(obj,reference,y_feedback)
+            % verifico correttezza degli ingressi.
+            % questo controllore richiede che reference,y e u siano scalari
+            assert(isscalar(reference));
+            assert(isscalar(y_feedback));
+            
+            e=reference-y_feedback;
+            
+            u=obj.xi+obj.Kp*e;
+            %azione antiwindup = > integrazione condizionata
+            %condizioni per uscire dai vari casi critici della integrazione.
+            if (u>obj.umax)
+                u=obj.umax;
+                if (e<0) % integrazione condizionata
+                    obj.xi=obj.xi+obj.Ki*obj.st*e;
+                end
+            elseif (u<-obj.umax)
+                u=-obj.umax;
+                if (e>0) % integrazione condizionata
+                    obj.xi=obj.xi+obj.Ki*obj.st*e;
+                end
+            else
+                obj.xi=obj.xi+obj.Ki*obj.st*e;
+            end
         end
     end
 end
