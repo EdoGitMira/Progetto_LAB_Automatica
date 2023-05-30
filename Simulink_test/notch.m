@@ -1,14 +1,22 @@
 function y = notch(t,u)
-    persistent ym1  um1
+    persistent y_1 y_2 u_1 u_2
     if t<0.001 %
-        ym1=0.;
-        um1=-0.01;
-        y=0.;
+        y_1=0;
+        y_2=0;
+        u_1=0;
+        u_2=0;
+        y=u-1.917*u_1+0.959*u_2+1.689*y_1-0.7318*y_2;
+        u_2=u_1;
+        u_1 = u;
+        y_2=y_1;
+        y_1 = y;
     else
-        u_now = ym1+Kp*((1+(Ki*0.001))*u-um1);
-        um1 = u;
-        ym1 = u_now;
-        y = u_now;
+        y = u-1.917*u_1+0.959*u_2+1.689*y_1-0.7318*y_2;
+        u_2=u_1;
+        u_1 = u;
+        
+        y_2=y_1;
+        y_1 = y;
 
     end
 end
