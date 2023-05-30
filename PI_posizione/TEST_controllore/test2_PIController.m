@@ -9,7 +9,7 @@ for itest=1:100
     Ki=5*rand; % setto dei valori random
     umax=10*rand;
 
-    ctrl=PIController_pos(st,Kp,Ki);
+    ctrl=PIController_vel(st,Kp,Ki);
     ctrl.setUMax(umax);
 
 

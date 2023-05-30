@@ -1,24 +1,22 @@
 clear all;clc;close all
-addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_posizione')
+addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_velocità')
 % questo script testa le funzioni della classe
 
 %% TEST starting conditions
 for itest=1:100
     st=1e-3;
     Kp=5*rand; % setto dei valori random
-    Ki=5*rand; % setto dei valori random
+    Ki=0; % setto dei valori random
     umax=10*rand;
 
-    ctrl=PIController_pos(st,Kp,Ki);
+    ctrl=PIController_vel(st,Kp);
     ctrl.setUMax(umax);
 
-    ctrl.initialize; % inizializzo
+    %y = k*(setpoint-y(t-1))
 
     setpoint=randn;
     y=randn;
-
     uinitial=rand*umax;
-    ctrl.starting(setpoint,y,uinitial); % inizializzo lo stato
 
     u=ctrl.computeControlAction(setpoint,y);
     % the first u should be equal to uinitial

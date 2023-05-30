@@ -4,6 +4,7 @@ classdef PIController_vel < BaseController
         Kp     %valore del azione di controllo proporzionale      
         %u_past %valore dell'azione di controllo nell'istante precedente
         %e_past %valore dell'errore passato
+        Umax
     end
     
     methods
@@ -19,23 +20,39 @@ classdef PIController_vel < BaseController
             obj@BaseController(st) 
             obj.Kp = Kp;
 
-
         end
-        
+       
         function obj = initialize(obj)
-
         end
 
         function obj = starting(obj)
             %obj.e_past = 0;
             %obj.u_past = 0;
         end
+        
+        function obj = SetUmax(umax)
+            assert(isscalar(umax));
+            assert(umax>0);
+            obj.Umax=umax;
+        end
+        
 
-        function u =  computeControlAction(obj,reference,y_feedback)   
+        function u =  computeControlAction(obj,reference,y_feedback)  
+
+            assert(isscalar(reference));
+            assert(isscalar(y_feedback));
+            
             error = reference - y_feedback;
-            u_now = obj.Kp.*(error);
+            u_now = obj.Kp*(error);
             %obj.e_past = error;
             %obj.u_past = u_now;
+            if abs(u_now)>obj.Umax
+                if u_now > 0
+                    u_now = obj.Umax; 
+                else
+                    u_now = -obj.Umax;
+                end
+            end
             u = u_now;
         end    
     end
