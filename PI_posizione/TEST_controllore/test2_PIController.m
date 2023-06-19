@@ -9,13 +9,6 @@ for itest=1:100
     Ki=5*rand; % setto dei valori random
     umax=10*rand;
 
-    ctrl=PIController_pos(st,Kp,Ki);
-    ctrl.setUMax(umax);
-
-
-
-    ctrl.initialize;
-
     time_test2=(0:st:30)';
 
     % randn genera un segnale bianco (media nulla)
@@ -25,6 +18,11 @@ for itest=1:100
     y=zeros(length(time_test2),1);
     e=reference-y;
     e(10:end)=0;
+
+     ctrl=PIController_pos(st,Kp,Ki);
+     ctrl.setUMax(umax);
+     ctrl.initialize;
+     ctrl.starting(reference(1),0,e(1)*Kp)
 
     s=tf('s');
     ctrl_continuo=Kp+Ki/s;

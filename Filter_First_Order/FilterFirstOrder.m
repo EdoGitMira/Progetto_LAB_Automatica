@@ -80,6 +80,8 @@ classdef FilterFirstOrder < handle
         %con il valore passato di reference e considerando i valori passati
         %diingresso e uscita del filtro
         function out = Compute(obj,reference)
+            assert(isscalar(reference));
+            
             outcalc = obj.A*obj.UoutPast+obj.B*obj.UinPast;
             
             %aggiornamento dei valori dell'ingresso passati

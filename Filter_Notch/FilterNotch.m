@@ -56,7 +56,7 @@ classdef FilterNotch < handle
         end
         
         %funzione per la discretizzazione del filtro nella traformata z e
-        %pe ril calcolo della delle matriici A e B
+        %per il calcolo della delle matriici A e B
         function obj = Discretization(obj)
             
             obj.Fd = c2d(obj.Fs,obj.St,'tustin');
@@ -101,6 +101,8 @@ classdef FilterNotch < handle
         %con il valore passato di reference e considerando i valori passati
         %diingresso e uscita del filtro
         function out = Compute(obj,reference)
+            assert(isscalar(w));
+            
             outcalc = obj.A*obj.UoutPast+obj.B*obj.UinPast;
             
             %aggiornamento dei valori dell'ingresso passati
