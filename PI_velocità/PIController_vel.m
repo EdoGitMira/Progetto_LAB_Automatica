@@ -26,8 +26,6 @@ classdef PIController_vel < BaseController
         end
 
         function obj = starting(obj)
-            %obj.e_past = 0;
-            %obj.u_past = 0;
         end
         
         function obj = SetUmax(umax)
@@ -38,7 +36,6 @@ classdef PIController_vel < BaseController
         
 
         function u =  computeControlAction(obj,reference,y_feedback)  
-
             assert(isscalar(reference));
             assert(isscalar(y_feedback));
             

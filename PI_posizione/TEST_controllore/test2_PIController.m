@@ -9,7 +9,7 @@ for itest=1:100
     Ki=5*rand; % setto dei valori random
     umax=10*rand;
 
-    ctrl=PIController_vel(st,Kp,Ki);
+    ctrl=PIController_pos(st,Kp,Ki);
     ctrl.setUMax(umax);
 
 
@@ -24,6 +24,7 @@ for itest=1:100
     reference=cumtrapz(time_test2,randn(length(time_test2),1));
     y=zeros(length(time_test2),1);
     e=reference-y;
+    e(10:end)=0;
 
     s=tf('s');
     ctrl_continuo=Kp+Ki/s;
