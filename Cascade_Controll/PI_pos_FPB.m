@@ -1,4 +1,4 @@
-classdef PIController_pos_FPB < BaseController
+classdef PI_pos_FPB < BaseController
 
     properties (Access = private)
         %pi parameters
@@ -34,7 +34,7 @@ classdef PIController_pos_FPB < BaseController
 
     methods
         %metodo per la creazione del controllore PI
-        function obj = PIController_pos_FPB(st,Kp,Ki,Tf)
+        function obj = PI_pos_FPB(st,Kp,Ki,Tf)
             %check input
             assert(isscalar(Kp));
             assert(Kp>0);
