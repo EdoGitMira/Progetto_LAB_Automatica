@@ -1,21 +1,30 @@
 clear all;clc;close all
-addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_posizione')
+addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_vel_FPB_FNOTCH\')
 for itest=1:100
     st=1e-3;
     Kp=5*rand; % setto dei valori random
-    Ki=5*rand; % setto dei valori random
     umax=10*rand;
+    Tf = 1/1000;
+    wn = 656; %rad/s
+    xci_z=0.09; 
+    xci_p=1; 
 
-    ctrl=PIController_pos(st,Kp,Ki);
-    ctrl.setUMax(umax);
+    ctrl=PI_vel_FBP_FN(st,Kp,Tf,wn,xci_z,xci_p);
+    ctrl.SetUmax(umax);
 
 
     %% TEST CLOSE LOOP
     s=tf('s');
+    ctrl_continuo=tf(Kp);
 
-    ctrl_continuo=Kp+Ki/s;
-    ctrl_discreto=c2d(ctrl_continuo,st);
-    
+    Fs = tf(1,[Tf 1]);
+    Fz = c2d(Fs,st,'tustin');
+
+    Fsn = (s^2+2*xci_z*wn*s+wn^2)/(s^2+2*xci_p*wn*s+wn^2);
+    Fzn = c2d(Fsn,st,'tustin');
+
+    ctrl_discreto=c2d(ctrl_continuo,st)*Fz*Fzn;
+    ctrl_continuo=Kp*Fs*Fsn;
     P_continuo=rss(4); % genero sistema random
 
     % considero solo sistemi strettamente proprio
@@ -50,7 +59,7 @@ for itest=1:100
 
     x_processo=zeros(order(P_discreto),1);
     ctrl.initialize;
-
+   
     y_close_loop_class=nan(length(time),1);
     u_close_loop_class=nan(length(time),1);
     for idx=1:length(time)

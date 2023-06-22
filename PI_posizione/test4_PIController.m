@@ -1,19 +1,24 @@
 clear all;clc;close all
 
 st=1e-3;
-Kp=1; % valori taratura
-Ki=0; % valori taratura
+Kp=10; % valori taratura
+Ki=2; % valori taratura
 umax=150;
 
-ctrl=PIController_vel(st,Kp);
-ctrl.SetUmax(umax);
+ctrl=PIController_pos(st,Kp,Ki);
+ctrl.setUMax(umax);
 
 
 %% TEST CLOSE LOOP
 s=tf('s');
 
-ctrl_continuo=Kp+Ki/s;
-ctrl_discreto=c2d(ctrl_continuo,st);
+    ctrl_continuo=Kp+(Ki/s);
+    Ti=Kp/Ki;
+    k1=Kp*(1+(st/Ti));
+    k2=-Kp;
+    z=tf('z',st);   
+    c=(k1+k2*(z^-1))/(1-z^-1);
+    ctrl_discreto= c;
 
 P_continuo=1/(s+1); % modello identificato
 
@@ -71,6 +76,5 @@ grid on
 xlabel('time')
 ylabel('control action')
 legend('matlab discreto','matlab continuo','class')
-figure
-plot(time,noise)
+
 drawnow

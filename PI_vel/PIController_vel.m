@@ -2,8 +2,8 @@ classdef PIController_vel < BaseController
     %'controllore del secondo loop solo P
     properties
         Kp     %valore del azione di controllo proporzionale      
-        %u_past %valore dell'azione di controllo nell'istante precedente
-        %e_past %valore dell'errore passato
+        UMax
+        
     end
     
     methods
@@ -19,23 +19,35 @@ classdef PIController_vel < BaseController
             obj@BaseController(st) 
             obj.Kp = Kp;
 
-
         end
-        
-        function obj = Initialize(obj)
-
+       
+        function obj = initialize(obj)
         end
 
         function obj = starting(obj)
-            %obj.e_past = 0;
-            %obj.u_past = 0;
         end
+        
+        function obj = SetUmax(obj,umax)
+            assert(isscalar(umax));
+            assert(umax>0);
+            obj.UMax=umax;
+        end
+        
 
-        function u =  ComputeControlAction(obj,reference,y_feedback)   
+        function u =  computeControlAction(obj,reference,y_feedback)  
+            
+            assert(isscalar(reference));
+            assert(isscalar(y_feedback));
+            
             error = reference - y_feedback;
-            u_now = obj.Kp.*(error);
-            %obj.e_past = error;
-            %obj.u_past = u_now;
+            u_now = obj.Kp*(error);
+            if abs(u_now)>obj.UMax
+                if u_now > 0
+                    u_now = obj.UMax; 
+                else
+                    u_now =-obj.UMax;
+                end
+            end
             u = u_now;
         end    
     end

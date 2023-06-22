@@ -1,23 +1,47 @@
-classdef PIController_pos < BaseController
+classdef PIController_pos_FPB < BaseController
 
     properties (Access = private)
+        %pi parameters
         Kp %valore di azione proporzionale
         Ki %valore di azione integrale
         u_past %valore dell'azione di controllo nell'istante precedente
         e_past %valore dell'errore passato
         Ti
         UMax
-        
+       
+
+        %filter parameters
+        Tf       %tau del filtro
+        UinPast  %valori precedenti in ingresso al filtro
+        UoutPast %valori prededenti del filtro in uscita
+        Fs %filtro in continua
+        Fd %filtro in discreto
+        A  %vettore parametri per discretizzazione rispetto a y
+        B  %vettore parametri per discretizzazione rispetto a u
+
+
+        j   % costanti filtro passa basso
+        k
+        l
+        m
+
+        u_m1    % buffer di memoria per filtro
+        un_m1
+
+
     end
-    
+
+
     methods
         %metodo per la creazione del controllore PI
-        function obj = PIController_pos(st,Kp,Ki)
+        function obj = PIController_pos_FPB(st,Kp,Ki,Tf)
             %check input
             assert(isscalar(Kp));
             assert(Kp>0);
             assert(isscalar(Ki));
             assert(Ki>0);
+            assert(isscalar(Tf));
+            assert(Tf>=0);
             assert(isscalar(st));
             assert(st>0);
             %-----------
@@ -25,18 +49,27 @@ classdef PIController_pos < BaseController
             obj.Kp=Kp;
             obj.Ki=Ki;
             obj.Ti=double(Kp/Ki);
-            
+            obj.Tf = Tf;
+            Discretization(obj);
+
         end
 
         %inizializzazione dei valori passati
         function obj = initialize(obj)
             obj.u_past = 0;
             obj.e_past = 0;
+            obj.u_m1 = 0;
+            obj.un_m1 = 0;
+            obj.UinPast=0;
+            obj.UoutPast=0;
         end
 
         %funzione per return di Ki
         function out = valKi(obj)
             out = obj.Ki;
+        end
+        function out = val_U_pi(obj)
+            out = obj.u;
         end
 
         %funzione per return di e_past
@@ -67,12 +100,25 @@ classdef PIController_pos < BaseController
             assert(isscalar(u_set));
             obj.u_past = u_set;
         end
+        
         function obj = SetUmax(obj,umax)
             assert(isscalar(umax));
             assert(umax>0);
             obj.UMax=umax;
         end
 
+
+        function obj = Discretization(obj)
+            Fpb = tf(1,[obj.Tf 1]);
+            Fpb_disc = c2d(Fpb,obj.st,'tustin');
+            num_fpb = Fpb_disc.Numerator{1};
+            den_fpb = Fpb_disc.Denominator{1};
+
+            obj.j = num_fpb(1); %z
+            obj.k = num_fpb(2); %z-1
+            obj.l = den_fpb(1); %z  
+            obj.m = den_fpb(2); %z-1
+        end
 
         %funzione per inizializzare i valori del pi di posozione
         function obj = starting(obj,reference,y_feedback,uinitial)
@@ -84,9 +130,10 @@ classdef PIController_pos < BaseController
 
             % inizializzo l'azione integrale con implementazione bumbless
             error = double(reference-y_feedback);
-            
-            u_now = double(uinitial-obj.Kp.*((1+(obj.st/obj.Ti))*error));
+            obj.u_m1 = 0;
+            u_now = double((uinitial*obj.l)/obj.j-obj.Kp.*((1+(obj.st/obj.Ti))*error));  %solo pi
 
+            obj.un_m1 = 0;
             obj.u_past = double(u_now);
             obj.e_past = double(0);
         end
@@ -100,23 +147,23 @@ classdef PIController_pos < BaseController
             error = double(reference-y_feedabck);
             %FORMULA ALGORITMO DI  VELOCITA'
 
-
-            
             u_now = double(obj.u_past+obj.Kp.*((1+(obj.st/obj.Ti))*error-obj.e_past));
-           
-            
-            if (abs(u_now)>obj.UMax)
-                if u_now > 0
-                    u_now = double(obj.UMax);
+
+            un = (obj.j*u_now + obj.k*obj.u_m1 - obj.m*obj.un_m1)/obj.l;
+
+            if (abs(un)>obj.UMax)
+                if un > 0
+                    un = double(obj.UMax);
                 else
-                    u_now = double(-obj.UMax);
+                    un = double(-obj.UMax);
                 end
             end
-            u = u_now;
-             obj.e_past = double(error);
-            obj.u_past = double(u_now);
-            
 
+            obj.u_m1 = double(u_now);
+            obj.un_m1 = double(un);
+            obj.e_past = double(error);
+            obj.u_past = double(u_now);
+            u = double(un);
         end
     end
 end

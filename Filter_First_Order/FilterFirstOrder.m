@@ -45,7 +45,7 @@ classdef FilterFirstOrder < handle
         end
         
         %funzione per la discretizzazione del filtro nella traformata z e
-        %pe ril calcolo della delle matriici A e B
+        %per il calcolo della delle matriici A e B
         function obj = Discretization(obj)
             
             obj.Fd = c2d(obj.Fs,obj.St,'tustin');

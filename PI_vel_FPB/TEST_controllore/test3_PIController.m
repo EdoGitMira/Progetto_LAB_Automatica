@@ -1,21 +1,23 @@
 clear all;clc;close all
-addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_posizione')
+addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_velocità_filtred')
 for itest=1:100
     st=1e-3;
     Kp=5*rand; % setto dei valori random
     Ki=0; % setto dei valori random
     umax=10*rand;
+    Tf = 1/1000;
 
-    ctrl=PIController_vel(st,Kp);
+    ctrl=PIController_vel_f(st,Kp,Tf);
     ctrl.SetUmax(umax);
 
 
     %% TEST CLOSE LOOP
     s=tf('s');
 
-    ctrl_continuo=Kp+Ki/s;
-    ctrl_discreto=c2d(ctrl_continuo,st);
-    
+    ctrl_continuo=tf(Kp);
+    Fs = (1/(1+(Tf*s)));
+    ctrl_discreto=c2d(ctrl_continuo,st)*c2d(Fs,st,'tustin');;
+    ctrl_continuo=ctrl_continuo*Fs;
     P_continuo=rss(4); % genero sistema random
 
     % considero solo sistemi strettamente proprio
@@ -50,7 +52,7 @@ for itest=1:100
 
     x_processo=zeros(order(P_discreto),1);
     ctrl.initialize;
-
+   
     y_close_loop_class=nan(length(time),1);
     u_close_loop_class=nan(length(time),1);
     for idx=1:length(time)
