@@ -1,30 +1,33 @@
 clear all;clc;close all
-addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_vel_FPB_FNOTCH\')
 for itest=1:100
     st=1e-3;
-    Kp=5*rand; % setto dei valori random
     umax=10*rand;
-    Tf = 1/1000;
-    wn = 656; %rad/s
-    xci_z=0.09; 
-    xci_p=1; 
+    Kp=5*rand; % setto dei valori random
+    Ki=5*rand; % setto dei valori random
+    Kaw = Ki/Kp;
+    %filtro passa basso
+    Tf=1/1000;
+    
 
-    ctrl=PI_vel_FBP_FN(st,Kp,Tf,wn,xci_z,xci_p);
-    ctrl.SetUmax(umax);
+    ctrl=PI_FBP(st,Kp,Ki,Kaw,Tf);
+    ctrl.setUMax(umax);
+    
+    
 
 
     %% TEST CLOSE LOOP
-    s=tf('s');
-    ctrl_continuo=tf(Kp);
+    s = tf('s');
+    ctrl_continuo = (Kp+Ki/s);
 
-    Fs = tf(1,[Tf 1]);
-    Fz = c2d(Fs,st,'tustin');
+    %filtro passa basso
+    Fpbs = tf(1,[Tf 1]);
+    Fpbz = c2d(Fpbs,st,'tustin');
 
-    Fsn = (s^2+2*xci_z*wn*s+wn^2)/(s^2+2*xci_p*wn*s+wn^2);
-    Fzn = c2d(Fsn,st,'tustin');
 
-    ctrl_discreto=c2d(ctrl_continuo,st)*Fz*Fzn;
-    ctrl_continuo=Kp*Fs*Fsn;
+    %controllore - filtro notch - filtro passa basso
+    ctrl_discreto = c2d(ctrl_continuo,st)*Fpbz;
+    ctrl_continuo=ctrl_continuo*Fpbs;
+
     P_continuo=rss(4); % genero sistema random
 
     % considero solo sistemi strettamente proprio
@@ -96,6 +99,9 @@ for itest=1:100
 
     % check if control action is the same until saturation;
     idx_saturation=find(abs(u_close_loop_class)>=umax,1)-1;
+    disp(itest)
+    disp(norm(y_close_loop_matlab_discreto(1:idx_saturation)-y_close_loop_class(1:idx_saturation)))
+    disp(norm(u_close_loop_matlab_discreto(1:idx_saturation)-u_close_loop_class(1:idx_saturation)))
     assert(norm(y_close_loop_matlab_discreto(1:idx_saturation)-y_close_loop_class(1:idx_saturation))<1e-4)
     assert(norm(u_close_loop_matlab_discreto(1:idx_saturation)-u_close_loop_class(1:idx_saturation))<1e-4)
 

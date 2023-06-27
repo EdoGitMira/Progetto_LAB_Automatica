@@ -1,6 +1,6 @@
 classdef PI_pos_FPB < BaseController
 
-    properties (Access = private)
+    properties 
         %pi parameters
         Kp %valore di azione proporzionale
         Ki %valore di azione integrale
@@ -16,9 +16,6 @@ classdef PI_pos_FPB < BaseController
         UoutPast %valori prededenti del filtro in uscita
         Fs %filtro in continua
         Fd %filtro in discreto
-        A  %vettore parametri per discretizzazione rispetto a y
-        B  %vettore parametri per discretizzazione rispetto a u
-
 
         j   % costanti filtro passa basso
         k
@@ -49,8 +46,11 @@ classdef PI_pos_FPB < BaseController
             obj.Kp=Kp;
             obj.Ki=Ki;
             obj.Ti=double(Kp/Ki);
-            obj.Tf = Tf;
-            Discretization(obj);
+            if(Tf ~= 0)
+                obj.Tf = Tf;
+                Discretization(obj);
+            end
+            initialize(obj)
 
         end
 
@@ -128,7 +128,7 @@ classdef PI_pos_FPB < BaseController
             assert(isscalar(y_feedback));
             assert(isscalar(uinitial));
 
-            % inizializzo l'azione integrale con implementazione bumbless
+            % inizializzo l'azione integrale 
             error = double(reference-y_feedback);
             obj.u_m1 = 0;
             u_now = double((uinitial*obj.l)/obj.j-obj.Kp.*((1+(obj.st/obj.Ti))*error));  %solo pi
@@ -148,8 +148,13 @@ classdef PI_pos_FPB < BaseController
             %FORMULA ALGORITMO DI  VELOCITA'
 
             u_now = double(obj.u_past+obj.Kp.*((1+(obj.st/obj.Ti))*error-obj.e_past));
-
-            un = (obj.j*u_now + obj.k*obj.u_m1 - obj.m*obj.un_m1)/obj.l;
+            
+            if(obj.Tf ~= 0)
+              un = (obj.j*u_now + obj.k*obj.u_m1 - obj.m*obj.un_m1)/obj.l;
+            else
+                un = u_now;
+            end
+            
 
             if (abs(un)>obj.UMax)
                 if un > 0

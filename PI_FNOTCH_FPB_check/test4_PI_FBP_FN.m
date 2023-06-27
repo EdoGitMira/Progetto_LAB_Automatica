@@ -1,28 +1,34 @@
-    clear all;clc;close all
-    addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_vel_FPB_FNOTCH\')
-    st=1e-3;
-    Kp=5*rand; % setto dei valori random
-    umax=10*rand;
-    Tf = 0.000001;
-    wn = 10000000; %rad/s
-    xci_z=0.1; 
-    xci_p=1; 
+clear all;clc;close all
+st=1e-3;
+umax=10*rand;
+Kp=5*rand; % setto dei valori random
+Ki=5*rand; % setto dei valori random
+Kaw = Ki/Kp;
+%filtro passa basso
+Tf=1/1000;
+%filtro notch
+wn = 656; %rad/s
+xci_z=0.09;
+xci_p=1;
 
-    ctrl=PI_vel_FBP_FN(st,Kp,Tf,wn,xci_z,xci_p);
-    ctrl.SetUmax(umax);
+ctrl=PI_FN_FBP(st,Kp,Ki,Kaw,wn,xci_z,xci_p,Tf);
+ctrl.setUMax(umax);
 
-    %% TEST CLOSE LOOP
-    s=tf('s');
-    ctrl_continuo=tf(Kp);
+%% TEST CLOSE LOOP
+s = tf('s');
+ctrl_continuo = (Kp+Ki/s);
 
-    Fs = tf(1,[Tf 1]);
-    Fz = c2d(Fs,st,'tustin');
+%filtro passa basso
+Fpbs = tf(1,[Tf 1]);
+Fpbz = c2d(Fpbs,st,'tustin');
 
-    Fsn = (s^2+2*xci_z*wn*s+wn^2)/(s^2+2*xci_p*wn*s+wn^2);
-    Fzn = c2d(Fsn,st,'tustin');
+%filtro notch
+Fns = (s^2+2*xci_z*wn*s+wn^2)/(s^2+2*xci_p*wn*s+wn^2);
+Fnz = c2d(Fns,st,'tustin');
 
-    ctrl_discreto=c2d(ctrl_continuo,st)*Fz*Fzn;
-    ctrl_continuo=Kp*Fs*Fsn;
+%controllore - filtro notch - filtro passa basso
+ctrl_discreto = c2d(ctrl_continuo,st)*Fnz*Fpbz;
+ctrl_continuo=ctrl_continuo*Fns*Fpbs;
 
 P_continuo=1/(s+1); % modello identificato
 
@@ -52,8 +58,8 @@ ctrl.starting(reference(1),0,0);
 y_close_loop_class=nan(length(time),1);
 u_close_loop_class=nan(length(time),1);
 for idx=1:length(time)
-    %y_close_loop_class(idx,1)=C*x_processo+noise(idx,1);
-    y_close_loop_class(idx,1)=C*x_processo;
+    y_close_loop_class(idx,1)=C*x_processo+noise(idx,1);
+    %y_close_loop_class(idx,1)=C*x_processo;
     u_close_loop_class(idx,1)=ctrl.computeControlAction(reference(idx),y_close_loop_class(idx,1));
     x_processo=A*x_processo+B*u_close_loop_class(idx,1);
 end

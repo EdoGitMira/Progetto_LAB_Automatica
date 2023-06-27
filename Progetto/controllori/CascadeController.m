@@ -64,13 +64,13 @@ classdef CascadeController < BaseController
             assert(xc_p2>0);
 
             assert(isscalar(Tf1_pos));
-            assert(Tf1_pos>0);
+            assert(Tf1_pos>=0);
             assert(isscalar(Tf2_pos));
-            assert(Tf2_pos>0);          
+            assert(Tf2_pos>=0);          
             assert(isscalar(Tf1_vel));
-            assert(Tf1_vel>0);
+            assert(Tf1_vel>=0);
             assert(isscalar(Tf2_vel));
-            assert(Tf2_vel>0);
+            assert(Tf2_vel>=0);
 
             obj@BaseController(st);
 %--------------------------------------------------------------------------
@@ -94,7 +94,9 @@ classdef CascadeController < BaseController
 
         % setta l'azione di controllo massima nei due controlli PI di
         % velocità che sono quelli che pilotano direttamente il motore
-        function obj = setUMax(obj,umax1,umax2)
+        function obj = setUMax(obj,umax)
+            umax1 = umax(1);
+            umax2 = umax(2);
             %verifica dei parametri utilizzati
             assert(isscalar(umax1));
             assert(umax1>0);
@@ -110,13 +112,36 @@ classdef CascadeController < BaseController
         %funzione di starting per inizializzazione dei filtri e dei
         %controllori
         function obj = Starting(obj,reference,y,u)
+            ref1= reference(1);
+            ref2 = reference(2);
+            u1 = u(1);
+            u2 = u(2);
+            pos1 = y(1);
+            pos2 = y(2);
+            vel1 = y(3);
+            vel2 = y(4);  
 
+            assert(isscalar(ref1))
+            assert(isscalar(ref2))
+            assert(isscalar(u1))
+            assert(isscalar(u2))
+            assert(isscalar(pos1))
+            assert(isscalar(pos2))
+            assert(isscalar(vel1))
+            assert(isscalar(vel2))
+            assert(abs(u1)>obj.P1vel_Fpb_Fn.sat)
+            assert(abs(u2)>obj.P2vel_Fpb_Fn.sat)
+
+            upos1 = u1/obj.P1vel_Fpb_Fn.Kp + vel1;
+            upos2= u2/obj.P2vel_Fpb_Fn.Kp + vel2;
+
+            obj.PI1pos_Fpb.starting(ref1,pos1,upos1)
+            obj.PI2pos_Fpb.starting(ref2,pos2,upos2) 
+            
+            obj.P1vel_Fpb_Fn.starting(upos1,vel1,u1)
+            obj.P1vel_Fpb_Fn.starting(upos2,vel2,u2)
         end
-        
-        
-        
-        
-
+                
         function u = computeControlAction(obj,reference,y)
         %------------------------------------------------------------------
         %-----definizione delle varibabili per il controlllo
@@ -146,8 +171,8 @@ classdef CascadeController < BaseController
         %------------------------------------------------------------------
         %calcolo azione di controllo del loop interno
         %con feedforward di coppia
-            Torque1 = obj.P1vel_Fpb_Fn.computeControlAction(Upi_pos1,vel_j1);
-            Torque2 = obj.P1vel_Fpb_Fn.computeControlAction(Upi_pos2,vel_j2);     
+            Torque1 = obj.P1vel_Fpb_Fn.computeControlAction(Upi_pos1,vel_j1)+T_ff(1);
+            Torque2 = obj.P1vel_Fpb_Fn.computeControlAction(Upi_pos2,vel_j2)+T_ff(2);     
     
             
             % azione di controllo giunto 1

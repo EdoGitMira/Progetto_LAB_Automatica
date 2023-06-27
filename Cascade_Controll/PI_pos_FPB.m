@@ -128,7 +128,7 @@ classdef PI_pos_FPB < BaseController
             assert(isscalar(y_feedback));
             assert(isscalar(uinitial));
 
-            % inizializzo l'azione integrale con implementazione bumbless
+            % inizializzo l'azione integrale 
             error = double(reference-y_feedback);
             obj.u_m1 = 0;
             u_now = double((uinitial*obj.l)/obj.j-obj.Kp.*((1+(obj.st/obj.Ti))*error));  %solo pi

@@ -58,7 +58,7 @@ classdef PI_vel_FBP_FN < BaseController
             obj.xci_z = xci_z;
             DiscretizationFPB(obj);
             DiscretizationFN(obj);
-
+            initialize(obj)
         end
        
         function obj = initialize(obj)

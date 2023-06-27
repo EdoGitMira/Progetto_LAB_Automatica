@@ -5,24 +5,28 @@ addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_vel_FPB_FNO
 %% TEST starting conditions
 for itest=1:100
     st=1e-3;
-    Kp=5*rand; % setto dei valori random
-    Tf=1/1000;
     umax=10*rand;
+    Kp=5*rand; % setto dei valori random
+    Ki=5*rand; % setto dei valori random
+    Kaw = Ki/Kp;
+    %filtro passa basso
+    Tf=1/1000;
+    %filtro notch
     wn = 656; %rad/s
     xci_z=0.09; 
-    xci_p=1; 
-    ctrl=PI_vel_FBP_FN(st,Kp,Tf,wn,xci_z,xci_p);
+    xci_p=1;
+
+    ctrl=PI_FN_FBP(st,Kp,Ki,Kaw,wn,xci_z,xci_p,Tf);
     ctrl.setUMax(umax);
     ctrl.initialize;
     
-
-    %y = k*(setpoint-y(t-1))
-
     setpoint=randn;
     y=randn;
-    uinitial=(setpoint-y)*Kp;
+
+    uinitial=rand*umax;%aggiungere possibilità di numeri negativi
     ctrl.starting(setpoint,y,uinitial);
     u=ctrl.computeControlAction(setpoint,y);
+
     % the first u should be equal to uinitial
     disp(itest)
     disp(abs(u-uinitial))
@@ -34,21 +38,23 @@ end
 %% TEST computeControlAction
 for itest=1:100
     st=1e-3;
+    umax=10*rand;
     Kp=5*rand; % setto dei valori random
     Ki=5*rand; % setto dei valori random
-    Tf=1/(1000*rand);
-    umax=10*rand;
+    Kaw = Ki/Kp;
+    %filtro passa basso
+    Tf=1/1000;
+    %filtro notch
     wn = 656; %rad/s
     xci_z=0.09; 
-    xci_p=1; 
+    xci_p=1;
 
-    ctrl=PI_vel_FBP_FN(st,Kp,Tf,wn,xci_z,xci_p);
+    ctrl=PI_FN_FBP(st,Kp,Ki,Kaw,wn,xci_z,xci_p,Tf);
     ctrl.SetUmax(umax);
 
     ctrl.initialize; % inizializzo
     uinitial=rand*umax;
-    
-
+     ctrl.starting(setpoint,y,uinitial); % inizializzo lo stato
     for istep=1:10000
         setpoint=randn;
         y=randn;
