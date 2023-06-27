@@ -105,7 +105,7 @@ classdef PI_FBP < BaseController
             %prendo il primo numeratore e e denominatore
             Fpb_d_num = Fpb_d.Numerator{1};
             Fpb_d_den = Fpb_d.Denominator{1};
-            %setto i parsmtri di conversione del filtro
+            %setto i parametri di conversione del filtro
             obj.nu_fpb = Fpb_d_num(1);
             obj.num1_fpb = Fpb_d_num(2);
             obj.ny_fpb = Fpb_d_den(1);
