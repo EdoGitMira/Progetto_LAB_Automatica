@@ -5,10 +5,9 @@ addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_vel_FPB\')
 for itest=1:100
     st=1e-3;
     Kp = 5*rand; % setto dei valori random
-    Tf = 1/2000;
     umax=10*rand;
 
-    ctrl=PIController_vel_f(st,Kp,Tf);
+    ctrl=P(st,Kp);
     ctrl.SetUmax(umax);
     ctrl.initialize;
 
@@ -22,14 +21,13 @@ for itest=1:100
     e=reference-y;
 
     s=tf('s');
-    Fs = tf(1,[Tf 1]);
+
     ctrl_continuo=tf(Kp);
-    Fz = c2d(Fs,st,'tustin');
-    ctrl_discreto=c2d(ctrl_continuo,st)*Fz;
-    ctrl_continuo=Kp*Fs;
+    ctrl_discreto=c2d(ctrl_continuo,st);
+
     u_matlab_discrete=lsim(ctrl_discreto,e,time_test2);
     u_class=nan(length(time_test2),1);
-    %ctrl.starting(0,0,0);
+
     
     for idx=1:length(time_test2)
         u_class(idx,1)=ctrl.computeControlAction(reference(idx),y(idx));

@@ -1,13 +1,9 @@
 clear all;clc;close all
-addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_velocità_filtred')
 for itest=1:100
     st=1e-3;
     Kp=5*rand; % setto dei valori random
-    Ki=0; % setto dei valori random
     umax=10*rand;
-    Tf = 1/1000;
-
-    ctrl=PIController_vel_f(st,Kp,Tf);
+    ctrl=P(st,Kp);
     ctrl.SetUmax(umax);
 
 
@@ -15,9 +11,8 @@ for itest=1:100
     s=tf('s');
 
     ctrl_continuo=tf(Kp);
-    Fs = (1/(1+(Tf*s)));
-    ctrl_discreto=c2d(ctrl_continuo,st)*c2d(Fs,st,'tustin');;
-    ctrl_continuo=ctrl_continuo*Fs;
+    ctrl_discreto=c2d(ctrl_continuo,st);
+
     P_continuo=rss(4); % genero sistema random
 
     % considero solo sistemi strettamente proprio
@@ -89,6 +84,9 @@ for itest=1:100
 
     % check if control action is the same until saturation;
     idx_saturation=find(abs(u_close_loop_class)>=umax,1)-1;
+    disp(itest)
+    disp(norm(y_close_loop_matlab_discreto(1:idx_saturation)-y_close_loop_class(1:idx_saturation)))
+    disp(norm(u_close_loop_matlab_discreto(1:idx_saturation)-u_close_loop_class(1:idx_saturation)))
     assert(norm(y_close_loop_matlab_discreto(1:idx_saturation)-y_close_loop_class(1:idx_saturation))<1e-4)
     assert(norm(u_close_loop_matlab_discreto(1:idx_saturation)-u_close_loop_class(1:idx_saturation))<1e-4)
 

@@ -1,24 +1,19 @@
 clear all;clc;close all
 
 st=1e-3;
-Kp=10; % valori taratura
-Ki=2; % valori taratura
+Kp=5; % valori taratura
 umax=150;
+Tf=1/300;
+Fpb = tf(1,[Tf 1]);
 
-ctrl=PIController_pos(st,Kp,Ki);
-ctrl.setUMax(umax);
+ctrl=P_FPB(st,Kp,Tf);
+ctrl.SetUmax(umax);
 
 
 %% TEST CLOSE LOOP
 s=tf('s');
-
-    ctrl_continuo=Kp+(Ki/s);
-    Ti=Kp/Ki;
-    k1=Kp*(1+(st/Ti));
-    k2=-Kp;
-    z=tf('z',st);   
-    c=(k1+k2*(z^-1))/(1-z^-1);
-    ctrl_discreto= c;
+ctrl_continuo=tf(Kp);
+ctrl_discreto=c2d(ctrl_continuo,st)*c2d(Fpb,st,'tustin');
 
 P_continuo=1/(s+1); % modello identificato
 
@@ -31,9 +26,10 @@ U_over_R_discreto=feedback(ctrl_discreto,P_discreto);
 Y_over_R_continuo=feedback(P_continuo*ctrl_continuo,1);
 U_over_R_continuo=feedback(ctrl_continuo,P_continuo);
 
-time=(0:st:30)';
+time=(0:st:60)';
 reference=time>2; % step
 noise=0.01*randn(length(time),1);
+noise2=0.1*sin(2*pi*1000*time);
 
 y_close_loop_matlab_discreto=lsim(Y_over_R_discreto,reference,time);
 u_close_loop_matlab_discreto=lsim(U_over_R_discreto,reference,time);
@@ -49,6 +45,7 @@ y_close_loop_class=nan(length(time),1);
 u_close_loop_class=nan(length(time),1);
 for idx=1:length(time)
     y_close_loop_class(idx,1)=C*x_processo+noise(idx,1);
+    %y_close_loop_class(idx,1)=C*x_processo+noise(idx,1)+noise2(idx,1);
     u_close_loop_class(idx,1)=ctrl.computeControlAction(reference(idx),y_close_loop_class(idx,1));
     x_processo=A*x_processo+B*u_close_loop_class(idx,1);
 end
@@ -76,5 +73,4 @@ grid on
 xlabel('time')
 ylabel('control action')
 legend('matlab discreto','matlab continuo','class')
-
 drawnow

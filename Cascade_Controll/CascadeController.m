@@ -1,95 +1,107 @@
 classdef CascadeController < BaseController
-    %CASCADECONTROLLER implementazione di un controllore a cascate dove
+    %CASCADECONTROLLER implementazione di un controllore a cascata dove
     %viene passato sia la posizione che la velocità nei loop di controllo e
     %si utilizza la coppia come attuazione
+
+    %un primo tentativo si era ipotizzato di realizzare un P interno e un
+    %PI esterno ma per problemi con l'azione di controllore probabilmente
+    %legati alla gestione dell' antiwind up si è deciso di implementare il 
+    %PI internamente per la più faciel gestione del antiwindup e un
+    %controllore P nel loop esterno.
     
     properties
-          
-        PI1pos_Fpb % PI posizione giunto 1
-        P1vel_Fpb_Fn % P velocità giunto 1
+    %--------------controllori per il primo giunto-------------------------
+        %PI per loop interno con filtro notch e passa basso
+        PI1vel_Fn_Fpb
+        %P per il loop esterno con filtro notch 
+        P1pos_Fpb
 
-        PI2pos_Fpb % PI posizione giunto 2
-        P2vel_Fpb_Fn % P velocità giunto 2
-   
-        model % modello utilizzato per la funzione di feedfowward di coppia
+     %--------------controllori per il secondo giunto----------------------
+        %PI per loop interno con filtro notch e passa basso
+        PI2vel_Fn_Fpb
+        %P per il loop esterno con filtro notch 
+        P2pos_Fpb
+
+    %--------------modello rigido del robot per azione di feedfoward-------
+        model
     end
     
     methods
         %CASCADECONTROLLER Construct
         function obj = CascadeController(st,IdynModel,...
-                Kp1_pos,Ki1_pos,Kp1_vel,...
-                Kp2_pos,Ki2_pos,Kp2_vel,...
+                Kp1_pos,Kp1_vel,Ki1_vel,Kaw1_vel,...
+                Kp2_pos,Kp2_vel,Ki2_vel,Kaw2_vel,...
                 Wn_notch1,xc_z1,xc_p1,...
                 Wn_notch2,xc_z2,xc_p2,...
                 Tf1_pos,Tf1_vel,...
                 Tf2_pos,Tf2_vel)
 
         
-            %check dei valori inseriti
+%-----------check dei valori inseriti--------------------------------------
             assert(isscalar(st));
             assert(st>0);
-            
+            %check dei valori inseriti giunto 1
             assert(isscalar(Kp1_pos));
             assert(Kp1_pos>0);
-            assert(isscalar(Ki1_pos));
-            assert(Ki1_pos>0);
-            
-            assert(isscalar(Kp2_pos));
-            assert(Kp2_pos>0);
-            assert(isscalar(Ki2_pos));
-            assert(Ki2_pos>0);
-            
             assert(isscalar(Kp1_vel));
             assert(Kp1_vel>0);
-%            assert(isscalar(Ki1_vel));
-%            assert(Ki1_vel>0);
-            
+            assert(isscalar(Ki1_vel));
+            assert(Ki1_vel>0);
+            assert(isscalar(Kaw1_vel));
+            assert(Kaw1_vel>0);
+            %check dei valori inseriti giunto 2
+            assert(isscalar(Kp2_pos));
+            assert(Kp2_pos>0);
             assert(isscalar(Kp2_vel));
             assert(Kp2_vel>0);
-%            assert(isscalar(Ki2_vel));
-%            assert(Ki2_vel>0);
-              
+            assert(isscalar(Ki2_vel));
+            assert(Ki2_vel>0);
+            assert(isscalar(Kaw2_vel));
+            assert(Kaw2_vel>0);
+            %check dei valori inseriti filtro notch giunto 1
             assert(isscalar(Wn_notch1));
             assert(Wn_notch1>0);
             assert(isscalar(xc_z1));
             assert(xc_z1>0);
             assert(isscalar(xc_p1));
             assert(xc_p1>0);
-            
+            %check dei valori inseriti filtro notch giunto 2
             assert(isscalar(Wn_notch2));
             assert(Wn_notch2>0);
             assert(isscalar(xc_z2));
             assert(xc_z2>0);
             assert(isscalar(xc_p2));
             assert(xc_p2>0);
-
+            %check dei valori inseriti filtro passa basso giunto 1
             assert(isscalar(Tf1_pos));
             assert(Tf1_pos>0);
-            assert(isscalar(Tf2_pos));
-            assert(Tf2_pos>0);          
             assert(isscalar(Tf1_vel));
             assert(Tf1_vel>0);
+            %check dei valori inseriti filtro passa basso giunto 2
+            assert(isscalar(Tf2_pos));
+            assert(Tf2_pos>0);          
             assert(isscalar(Tf2_vel));
-            assert(Tf2_vel>0);
-
-            obj@BaseController(st);
+            assert(Tf2_vel>0);           
 %--------------------------------------------------------------------------
 %-----------setting dei parametri dei controllori--------------------------
-            obj.PI1pos_Fpb = PI_pos_FPB(st,Kp1_pos,Ki1_pos,Tf1_pos);      
-            obj.P1vel_Fpb_Fn = PI_vel_FBP_FN(st,Kp1_vel,Tf1_vel,Wn_notch1,xc_z1,xc_p1);
+            obj@BaseController(st);
+            obj.P1pos_Fpb=;
+            obj.PI1vel_Fn_Fpb=;
             
-            obj.PI2pos_Fpb = PI_pos_FPB(st,Kp2_pos,Ki2_pos,Tf2_pos);
-            obj.P2vel_Fpb_Fn = PI_vel_FBP_FN(st,Kp2_vel,Tf2_vel,Wn_notch2,xc_z2,xc_p2);
+            obj.P2pos_Fpb=;
+            obj.PI2vel_Fn_Fpb=;
+            
 
+%-----------setting del modello rigido per FF------------------------------
             obj.model = IdynModel;
         end
         
         %funzione di inizializzazione dei sistemi
         function obj = initialize(obj)
-            obj.PI1pos_Fpb.initialize;
-            obj.P1vel_Fpb_Fn.initialize;
-            obj.PI2pos_Fpb.initialize;
-            obj.P2vel_Fpb_Fn.initialize;
+            obj.P1pos_Fpb.initialize;
+            obj.PI1vel_Fn_Fpb.initialize;
+            obj.P2pos_Fpb.initialize;
+            obj.PI2vel_Fn_Fpb.initialize;
         end
 
         % setta l'azione di controllo massima nei due controlli PI di
@@ -144,11 +156,12 @@ classdef CascadeController < BaseController
         %------------------------------------------------------------------
         %-----definizione delle varibabili per il controlllo
 
-            %valori letti dai sensori per le azionei di feedback
+            %valori letti dai sensori azioni di feedback
             pos_j1 = y(1);
             pos_j2 = y(2);
             vel_j1 = y(3);
-            vel_j2 = y(4);        
+            vel_j2 = y(4);    
+
             %riferimento delle leggi di moto
             Sp_pos_j1 = reference(1);
             Sp_pos_j2 = reference(2);
