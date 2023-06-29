@@ -130,27 +130,8 @@ classdef CascadeController < BaseController
 
         %metodo di starting per inizializzazione dei filtri e dei
         %controllori
-        function obj = Starting(obj,reference,y,u)
-            ref1= reference(1);
-            ref2 = reference(2);
-            u1 = u(1);
-            u2 = u(2);
-            pos1 = y(1);
-            pos2 = y(2);
-            vel1 = y(3);
-            vel2 = y(4);  
-
-            assert(isscalar(ref1))
-            assert(isscalar(ref2))
-            assert(isscalar(u1))
-            assert(isscalar(u2))
-            assert(isscalar(pos1))
-            assert(isscalar(pos2))
-            assert(isscalar(vel1))
-            assert(isscalar(vel2))
-            assert(abs(u1)>obj.P1vel_Fpb_Fn.sat)
-            assert(abs(u2)>obj.P2vel_Fpb_Fn.sat)
-
+        function obj = Starting(obj)
+            
         end
                 
         function u = computeControlAction(obj,reference,y)
@@ -173,8 +154,8 @@ classdef CascadeController < BaseController
 
         %------------------------------------------------------------------
         %calcolo azione di controllo del loop esterno 
-            UP1_vel = obj.P1pos_Fpb.computeControlAction(Sp_pos_j1,pos_j1);
-            UP2_vel = obj.P2pos_Fpb.computeControlAction(Sp_pos_j2,pos_j2);
+            UP1_vel = obj.P1pos_Fpb.computeControlAction(Sp_pos_j1,pos_j1)+Sp_vel_j1;
+            UP2_vel = obj.P2pos_Fpb.computeControlAction(Sp_pos_j2,pos_j2)+Sp_vel_j2;
 
         %------------------------------------------------------------------
         %calcolo azione  di feedfoward
@@ -183,8 +164,8 @@ classdef CascadeController < BaseController
         %------------------------------------------------------------------
         %calcolo azione di controllo del loop interno
         %con feedforward di coppia
-            Torque1 = obj.PI1vel_Fn_Fpb.computeControlAction(UP1_vel,vel_j1);
-            Torque2 = obj.PI2vel_Fn_Fpb.computeControlAction(UP2_vel,vel_j2);
+            Torque1 = obj.PI1vel_Fn_Fpb.computeControlAction(UP1_vel,vel_j1, 0);
+            Torque2 = obj.PI2vel_Fn_Fpb.computeControlAction(UP2_vel,vel_j2, 0);
 
         %------------------------------------------------------------------
         %Assegnazione dei valori di coppia ai giunti   

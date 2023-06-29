@@ -171,7 +171,7 @@ classdef PI_FN_FBP < BaseController
         
         %metodo per il calcolo della azione di controllo passato il riferimento e 
         %il valore di retroazione 
-        function u =  computeControlAction(obj,reference,y_feedback)  
+        function u =  computeControlAction(obj,reference,y_feedback,FF)  
             
             assert(isscalar(reference));
             assert(isscalar(y_feedback));
@@ -185,7 +185,7 @@ classdef PI_FN_FBP < BaseController
             unotch = (obj.nu_fn*u_now + obj.num1_fn*obj.um1 + obj.num2_fn*obj.um2 - obj.nym1_fn*obj.um1_notch - obj.nym2_fn*obj.um2_notch)/obj.ny_fn;
             
             % applicazione filtro passa-basso
-            un = (obj.nu_fpb*unotch + obj.num1_fpb*obj.um1_notch - obj.nym1_fpb*obj.um1_pb)/obj.ny_fpb;
+            un = (obj.nu_fpb*unotch + obj.num1_fpb*obj.um1_notch - obj.nym1_fpb*obj.um1_pb)/obj.ny_fpb+FF;
             
             % check azione di controllo per la verifica della saturazione
             % in caso affermativo azione di anti-windup
