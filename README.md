@@ -46,9 +46,9 @@ Il progetto è diviso principalmente in due cartelle:
 2. si inizia dal loop interno, settare il filtro notch nella apposita sezione 
 3. settare filtro passa basso 
 4. scelta dei valori di Ki e Kp del controllore si sceglie una frequenza di taglio Wc_des  
-  - l'azione integrale viene posta circa una decade prima wi = wc_des/30 -> Ki = Kp*wi
-  - l'azione proporzionale per avere l'omega di taglio desiderata calcolandi di quanto devo alzare il grafico  Kp=(1/abs(freqresp(sistema,wc_des)))
-  - viene calcolato anche l'antiwindup con  Kaw = Ki/Kp
+   - l'azione integrale viene posta circa una decade prima wi = wc_des/30 -> Ki = Kp*wi
+   - l'azione proporzionale per avere l'omega di taglio desiderata calcolandi di quanto devo alzare il grafico  Kp=(1/abs(freqresp(sistema,wc_des)))
+   - viene calcolato anche l'antiwindup con  Kaw = Ki/Kp
 5. si passa poi al loop esterno con l'applicazione del filtro passa basso e poi del valore di Kp in base alla w desiderat
 6. ripartire dal punto 1 per il secondo giunto
 
