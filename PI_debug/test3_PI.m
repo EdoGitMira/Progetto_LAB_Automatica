@@ -7,7 +7,7 @@ for itest=1:100
     Ki=5*rand; % setto dei valori random
     Kaw = Ki/Kp;
     ctrl=PI(st,Kp,Ki,Kaw);
-    ctrl.setUMax(umax);
+    ctrl.SetUmax(umax);
  
     %% TEST CLOSE LOOP
     s = tf('s');

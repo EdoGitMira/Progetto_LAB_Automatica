@@ -10,7 +10,7 @@ for itest=1:100
     
 
     ctrl=PI_FBP(st,Kp,Ki,Kaw,Tf);
-    ctrl.setUMax(umax);
+    ctrl.SetUmax(umax);
     
     
 

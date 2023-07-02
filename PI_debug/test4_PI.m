@@ -6,7 +6,7 @@ Ki=5*rand; % setto dei valori random
 Kaw = Ki/Kp;
 
 ctrl=PI(st,Kp,Ki,Kaw);
-ctrl.setUMax(umax);
+ctrl.SetUmax(umax);
 
 %% TEST CLOSE LOOP
 s = tf('s');
@@ -60,7 +60,7 @@ hold off
 grid on
 xlabel('time')
 ylabel('process output')
-legend('matlab discreto','matlab continuo','class')
+legend('matlab discreto','matlab continuo','class','Location','best')
 
 subplot(2,1,2)
 stairs(time,u_close_loop_matlab_discreto)

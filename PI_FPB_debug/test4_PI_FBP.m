@@ -8,7 +8,7 @@ Kaw = Ki/Kp;
 Tf=1/10;
 
 ctrl=PI_FBP(st,Kp,Ki,Kaw,Tf);
-ctrl.setUMax(umax);
+ctrl.SetUmax(umax);
 
 %% TEST CLOSE LOOP
 s = tf('s');

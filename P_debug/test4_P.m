@@ -59,7 +59,7 @@ hold off
 grid on
 xlabel('time')
 ylabel('process output')
-legend('matlab discreto','matlab continuo','class')
+legend('matlab discreto','matlab continuo','class','Location','best')
 
 subplot(2,1,2)
 stairs(time,u_close_loop_matlab_discreto)
@@ -70,5 +70,5 @@ hold off
 grid on
 xlabel('time')
 ylabel('control action')
-legend('matlab discreto','matlab continuo','class')
+legend('matlab discreto','matlab continuo','class','Location','best')
 drawnow

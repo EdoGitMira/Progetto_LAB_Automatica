@@ -1,7 +1,5 @@
 clear all;clc;close all
 % COMPARE WITH TRANSFER FUNCTION - OPEN LOOP
-addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_vel_FPB\')
-
 for itest=1:100
     st=1e-3;
     Kp = 5*rand; % setto dei valori random

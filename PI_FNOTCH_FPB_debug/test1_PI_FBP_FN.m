@@ -1,7 +1,4 @@
 clear all;clc;close all
-addpath('C:\Users\edoar\Documenti\git hub\Progetto_LAB_Automatica\PI_vel_FPB_FNOTCH\')
-% questo script testa le funzioni della classe
-
 %% TEST starting conditions
 for itest=1:100
     st=1e-3;
@@ -17,7 +14,7 @@ for itest=1:100
     xci_p=1;
 
     ctrl=PI_FN_FBP(st,Kp,Ki,Kaw,wn,xci_z,xci_p,Tf);
-    ctrl.setUMax(umax);
+    ctrl.SetUmax(umax);
     ctrl.initialize;
     
     setpoint=randn;

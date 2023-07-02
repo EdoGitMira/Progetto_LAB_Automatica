@@ -12,7 +12,7 @@ for itest=1:100
     Tf=1/1000;
 
     ctrl=PI_FBP(st,Kp,Ki,Kaw,Tf);
-    ctrl.setUMax(umax);
+    ctrl.SetUmax(umax);
     ctrl.initialize;
     
     setpoint=randn;

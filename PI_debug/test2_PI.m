@@ -9,7 +9,7 @@ for itest=1:100
     Kaw = Ki/Kp;
 
     ctrl=PI(st,Kp,Ki,Kaw);
-    ctrl.setUMax(umax);
+    ctrl.SetUmax(umax);
     ctrl.initialize;
     
     time_test2=(0:st:30)';
