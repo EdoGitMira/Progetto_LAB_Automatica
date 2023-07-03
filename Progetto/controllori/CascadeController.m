@@ -154,8 +154,8 @@ classdef CascadeController < BaseController
 
         %------------------------------------------------------------------
         %calcolo azione di controllo del loop esterno 
-            UP1_vel = obj.P1pos_Fpb.computeControlAction(Sp_pos_j1,pos_j1)+Sp_vel_j1;
-            UP2_vel = obj.P2pos_Fpb.computeControlAction(Sp_pos_j2,pos_j2)+Sp_vel_j2;
+            UP1_vel = obj.P1pos_Fpb.computeControlAction(Sp_pos_j1,pos_j1);%+Sp_vel_j1;
+            UP2_vel = obj.P2pos_Fpb.computeControlAction(Sp_pos_j2,pos_j2);%+Sp_vel_j2;
 
         %------------------------------------------------------------------
         %calcolo azione  di feedfoward
@@ -164,8 +164,8 @@ classdef CascadeController < BaseController
         %------------------------------------------------------------------
         %calcolo azione di controllo del loop interno
         %con feedforward di coppia
-            Torque1 = obj.PI1vel_Fn_Fpb.computeControlAction(UP1_vel,vel_j1, 0);
-            Torque2 = obj.PI2vel_Fn_Fpb.computeControlAction(UP2_vel,vel_j2, 0);
+            Torque1 = obj.PI1vel_Fn_Fpb.computeControlAction(UP1_vel,vel_j1, T_ff(1));
+            Torque2 = obj.PI2vel_Fn_Fpb.computeControlAction(UP2_vel,vel_j2, T_ff(2));
 
         %------------------------------------------------------------------
         %Assegnazione dei valori di coppia ai giunti   
