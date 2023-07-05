@@ -1,0 +1,1 @@
+prima di avviare la simulazione in simulink lanciare lo script simulink_config per caricare i parametri e il modello del sistema
