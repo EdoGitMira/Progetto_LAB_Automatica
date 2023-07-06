@@ -14,11 +14,10 @@
   - [Identificazione](#identificazione)
   - [Validazione](#validazione)
   - [Taratura](#taratura)
-  - [Score](#score)
 
 ## Organizzazione contenuti
 Il progetto è diviso principalmente in due cartelle:
-- **DEBUG:** cartella all'interno della quale sono stati sviluppati tutti i codici per l'impementazione delle classi di controllo del sistema scara in particolare del controllore in cascate dei controllori **P ,PI** e dei filtri per l'attenuazione della risonanza **filtro notch** e per l'attenuazione dei disturbi **filtro passa basso**
+- **DEBUG:** cartella all'interno della quale sono stati sviluppati tutti i codici per l'impementazione delle classi di controllo del sistema SCARA in particolare del controllore in cascate composto dai controllori **P ,PI** e dai filtri per l'attenuazione della risonanza **filtro notch** e per l'attenuazione dei disturbi **filtro passa basso**
 - **Progetto:** dove è contenuto tutto il codice per l'dentificazione, taratura e calcolo dello score del controllore. AL suo interno è organizzato:
   - **controllori:** cartella dove risiedono i controllori per l'attuazione del robot SCARA
   - **file_mat_init:** cartella di interscambio dei file.mat generati dagli script contenuti nella cartella identificazione e utilizzati per il calcolo dello score 
@@ -55,6 +54,8 @@ Il progetto è diviso principalmente in due cartelle:
 
 ## Progetto
 il progetto consiste nella identificazione e sucessiva taratura di un controllore attraverso il modello identificato di un robot scara a 2 assi, che esegue una movimentazione di pick and place di un determinato oggetto. per la valutazionre della bonta del progetto si usa uno script ch efa variare la traettoria e il payload del robot.
+![27945-productpicture-hires-en-ls10-b702s_07](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/cbf687ad-7725-4ec1-b7af-789939c58dc9)
+
 
 ## Identificazione
 l'dentificazione è stata eseguita eccitando il giunto interessato con un sweep in frequenza "chirp" a cui si somma un segnle portante.
@@ -87,7 +88,7 @@ Per la taratura ci siamo affidati al modello del sistema ricavato nella fase di 
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/2d925c13-6448-474a-a1ac-f1bdc1f5ee18)
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/e3bbf8e2-2e2c-44a4-9d21-b221533f112a)
 
-## Score
+
 [Badge License]: https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge
 [Badge Edoardo]: https://img.shields.io/badge/Edoardo_Mirandola-FF6600?style=for-the-badge
 [Badge Manuele]: https://img.shields.io/badge/Manuele_Pennacchio-FF6600?style=for-the-badge
