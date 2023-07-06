@@ -59,6 +59,7 @@ Il progetto è diviso principalmente in due cartelle:
 
 ## Progetto
 il progetto consiste nell'identificazione e sucessiva taratura di un controllore attraverso il modello identificato di un robot SCARA a 2 assi, che esegue una movimentazione di pick and place di un determinato oggetto. per la valutazionre della bonta del progetto si usa uno script che fa variare la traettoria e il payload del robot.
+
 ![27945-productpicture-hires-en-ls10-b702s_07](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/cbf687ad-7725-4ec1-b7af-789939c58dc9)
 
 
@@ -69,6 +70,7 @@ Per verificare la correttezza dei modelli otteuti è stata eseguita una fase di 
 l'identificazione è stata eseguita in closed-loop impostando:
   - un controllore poco aggressivo per il giunto da indentificare
   - un controllore molto aggressivo per il giunto da NON identificare. In tal modo è possibile limitare i movimenti su di esso per non influenzare l'identificazione. Tale controllore implementa un controllo principalmente proporzionale rispetto alla posizione assunta dal giunto controllato.
+
 `N.B.` il codice necessario è stato realizzato all'interno della cartella identificazione negli script di identificazione dei giunti
 
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/99c6af10-4a14-4407-a690-c2e91acf384c)
@@ -77,6 +79,7 @@ l'identificazione è stata eseguita in closed-loop impostando:
 
 ## Verifica dei Controllori
 Sono stati eseguiti dei test che permettano di verificare sia le condizioni di starting che della condione di saturazione. Tali test sono stati applicati alle classi utilizzate sia in open-loop che in closed-loop per verificare che si comportassero in modo analogo ai controllori realizzati direttamente all'interno di script matlab.
+
 `N.B.` vedere cartella debug per risulatati
 
 
