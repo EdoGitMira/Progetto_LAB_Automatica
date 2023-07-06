@@ -60,8 +60,11 @@ Il progetto è diviso principalmente in due cartelle:
 ## Progetto
 il progetto consiste nell'identificazione e sucessiva taratura di un controllore attraverso il modello identificato di un robot SCARA a 2 assi, che esegue una movimentazione di pick and place di un determinato oggetto. per la valutazionre della bonta del progetto si usa uno script che fa variare la traettoria e il payload del robot.
 
-![27945-productpicture-hires-en-ls10-b702s_07](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/cbf687ad-7725-4ec1-b7af-789939c58dc9)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/scara.png)
 
+leggi di moto:
+
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/moto.png)
 
 ## Identificazione
 l'dentificazione è stata eseguita eccitando il giunto interessato con un sweep in frequenza "chirp" a cui si somma un segnle portante.
@@ -72,9 +75,12 @@ l'identificazione è stata eseguita in closed-loop impostando:
   - un controllore molto aggressivo per il giunto da NON identificare. In tal modo è possibile limitare i movimenti su di esso per non influenzare l'identificazione. Tale controllore implementa un controllo principalmente proporzionale rispetto alla posizione assunta dal giunto controllato.
 
 `N.B.` il codice necessario è stato realizzato all'interno della cartella identificazione negli script di identificazione dei giunti
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/ide_cont.png)
 
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/99c6af10-4a14-4407-a690-c2e91acf384c)
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/45c44465-760a-4628-bbe6-c6c5e1c59b33)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g1.png)
+
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g2.png)
+
 
 
 ## Verifica dei Controllori
@@ -88,16 +94,14 @@ Si è deciso di utilizzare un controllore in cascata nel quale nel loop interno 
 Per la taratura ci si è affidati al modello del sistema ricavato nella fase di identificazione.
 ### GIUNTO 1
 `N.B.` vedere cartella identificazione taratua giunto 1 PI interno per il codice utilizzato
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/a8412669-4857-4ff6-9513-057d87c992ec)
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/786f4fc2-03d3-4fc7-b57b-d3a427ea8ce6)
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/c01a3ed0-3ebd-459e-9490-f871e64f92e2)
-
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g1_i1.png)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g1_i2.png)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g1_e.png)
 ### GIUNTO 2
 `N.B.` vedere cartella identificazione taratua giunto 2 PI interno per il codice utilizzato
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/ac3d6805-69f2-4479-982a-3950a2fcf844)
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/2d925c13-6448-474a-a1ac-f1bdc1f5ee18)
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/e3bbf8e2-2e2c-44a4-9d21-b221533f112a)
-
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g2_i1.png)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g2_i2.png)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g2_e.png)
 
 [Badge License]: https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge
 [Badge Edoardo]: https://img.shields.io/badge/Edoardo_Mirandola-FF6600?style=for-the-badge
