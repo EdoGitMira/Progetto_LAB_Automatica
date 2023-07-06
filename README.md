@@ -15,6 +15,7 @@
   - [Validazione](#validazione)
   - [Taratura](#taratura)
 
+
 ## Organizzazione contenuti
 Il progetto è diviso principalmente in due cartelle:
 - **DEBUG:** cartella all'interno della quale sono stati sviluppati tutti i codici per l'impementazione delle classi di controllo del sistema SCARA in particolare del controllore in cascate composto dai controllori **P ,PI** e dai filtri **filtro notch** (attenuazione della risonanza) e **filtro passa basso** (attenuazione dei disturbi)
