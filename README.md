@@ -62,7 +62,8 @@ il progetto consiste nell'identificazione e sucessiva taratura di un controllore
 
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/scara.png)
 
-leggi di moto
+leggi di moto:
+
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/moto.png)
 
 ## Identificazione
