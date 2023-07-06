@@ -14,7 +14,6 @@
   - [Identificazione](#identificazione)
   - [Validazione](#validazione)
   - [Taratura](#taratura)
-  - [Score](#score)
 
 ## Organizzazione contenuti
 Il progetto è diviso principalmente in due cartelle:
@@ -89,7 +88,7 @@ Per la taratura ci siamo affidati al modello del sistema ricavato nella fase di 
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/2d925c13-6448-474a-a1ac-f1bdc1f5ee18)
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/e3bbf8e2-2e2c-44a4-9d21-b221533f112a)
 
-## Score
+
 [Badge License]: https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge
 [Badge Edoardo]: https://img.shields.io/badge/Edoardo_Mirandola-FF6600?style=for-the-badge
 [Badge Manuele]: https://img.shields.io/badge/Manuele_Pennacchio-FF6600?style=for-the-badge
