@@ -66,6 +66,6 @@ Il progetto è diviso principalmente in due cartelle:
 
 
 [Badge License]: https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge
-[Badge Edoardo]: https://img.shields.io/badge/Edoardo_Mirandola-FFC000?style=for-the-badge
-[Badge Manuele]: https://img.shields.io/badge/Manuele_Pennacchio-FFC000?style=for-the-badge
-[Badge Peter]: https://img.shields.io/badge/Peter_William_Fares-FFC000?style=for-the-badge
+[Badge Edoardo]: https://img.shields.io/badge/Edoardo_Mirandola-FF6600?style=for-the-badge
+[Badge Manuele]: https://img.shields.io/badge/Manuele_Pennacchio-FF6600?style=for-the-badge
+[Badge Peter]: https://img.shields.io/badge/Peter_William_Fares-FF6600?style=for-the-badge
