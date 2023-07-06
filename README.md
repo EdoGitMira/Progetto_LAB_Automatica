@@ -75,14 +75,14 @@ l'identificazione è stata eseguita in closed-loop impostando:
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/45c44465-760a-4628-bbe6-c6c5e1c59b33)
 
 
-## Validazione
-Sono stati utilizzati dei test che permetto la verifica sia delle condizioni di starting che della condione di saturazione. Successivamente si è verifica che le classi utilizzate sia in openloop che in closeloop coincidessero con gli analoghi andamenti dei controllori fatti direttamente al'interno di script matlab.
+## Verifica dei Controllori
+Sono stati eseguiti dei test che permettano di verificare sia le condizioni di starting che della condione di saturazione. Tali test sono stati applicati alle classi utilizzate sia in open-loop che in closed-loop per verificare che si comportassero in modo analogo ai controllori realizzati direttamente all'interno di script matlab.
 `N.B.` vedere cartella debug per risulatati
 
 
 ## Taratura
-si è deciso di utilizzare un controllore in cascata nel quale nel loop interno è presente un controllore PI mentre nel loop esterno è presente un controllore P.
-Per la taratura ci siamo affidati al modello del sistema ricavato nella fase di identificazione.
+Si è deciso di utilizzare un controllore in cascata nel quale nel loop interno è presente un controllore PI mentre nel loop esterno è presente un controllore P.
+Per la taratura ci si è affidati al modello del sistema ricavato nella fase di identificazione.
 ### GIUNTO 1
 `N.B.` vedere cartella identificazione taratua giunto 1 PI interno per il codice utilizzato
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/a8412669-4857-4ff6-9513-057d87c992ec)
