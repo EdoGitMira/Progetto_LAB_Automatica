@@ -5,8 +5,6 @@
 ![Badge Manuele]
 
 
-
-
 ## Tabella dei contenuti
 
 - [Tabella dei contenuti](#tabella-dei-contenuti)
@@ -17,7 +15,6 @@
   - [Validazione](#validazione)
   - [Taratura](#taratura)
   - [Score](#score)
--  [Conclusioni](#conclusioni)
 
 ## Organizzazione contenuti
 Il progetto è diviso principalmente in due cartelle:
@@ -57,14 +54,40 @@ Il progetto è diviso principalmente in due cartelle:
 `N.B.` I valori dei controllori vengono salvati nella nella cartella **file_mat_init** con il nome **ctrlX.mat**
 
 ## Progetto
+il progetto consiste nella identificazione e sucessiva taratura di un controllore attraverso il modello identificato di un robot scara a 2 assi, che esegue una movimentazione di pick and place di un determinato oggetto. per la valutazionre della bonta del progetto si usa uno script ch efa variare la traettoria e il payload del robot.
+
 ## Identificazione
+l'dentificazione è stata eseguita eccitando il giunto interessato con un sweep in frequenza "chirp" a cui si somma un segnle portante.
+poi tramitre algoritmi si è ricavata la risposta in frequenza del sistema e il si è ricavato il modello dell'ordine d'interesse 3° per il primo giunto e 5° per il secondo giunto.
+per verificare la correttezza dei modelli otteuti è stata eseguita una fase di validazione dove si eccita il sistema con un segnale differente si ricava il modello e lo si confronta con il modell ottenuto.
+l'identificazione è stata eseguita in closeloop recendo il controllore del giunto da indentificare poco aggressivo e per quello non sotto indagite è stato fatto un tuning in maniera tale da compensare la posizione ed avere un movimento molto piccolo per non influenzare l'identificazione dell'altro giunto si è deciso di fare una correzzione di x[Nm] in base a dove il giunto si trova.
+`N.B.` il codice necessario è stato realizzato all'interno della cartella identificazione negli script di identificazione dei giunti
+
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/99c6af10-4a14-4407-a690-c2e91acf384c)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/45c44465-760a-4628-bbe6-c6c5e1c59b33)
+
+
 ## Validazione
+sono stati utilizzati dei test che permetto la verifica sia delle condizioni di starting che della condione di saturazione. Successivamente si è verifica che le classi utilizzate sia in openloop che in closeloop coincidessero con gli analoghi andamenti dei controllori fatti direttamente al'interno di script matlab.
+`N.B.` vedere cartella debug per risulatati
+
+
 ## Taratura
+si è deciso di utilizzare un controllore in cascata nel quale nel loop interno è presente un controllore PI mentre nel loop esterno è presente un controllore P.
+Per la taratura ci siamo affidati al modello del sistema ricavato nella fase di identificazione.
+### GIUNTO 1
+`N.B.` vedere cartella identificazione taratua giunto 1 PI interno per il codice utilizzato
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/a8412669-4857-4ff6-9513-057d87c992ec)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/786f4fc2-03d3-4fc7-b57b-d3a427ea8ce6)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/c01a3ed0-3ebd-459e-9490-f871e64f92e2)
+
+### GIUNTO 2
+`N.B.` vedere cartella identificazione taratua giunto 2 PI interno per il codice utilizzato
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/ac3d6805-69f2-4479-982a-3950a2fcf844)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/2d925c13-6448-474a-a1ac-f1bdc1f5ee18)
+![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/e3bbf8e2-2e2c-44a4-9d21-b221533f112a)
+
 ## Score
-## Conclusioni
-
-
-
 [Badge License]: https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge
 [Badge Edoardo]: https://img.shields.io/badge/Edoardo_Mirandola-FF6600?style=for-the-badge
 [Badge Manuele]: https://img.shields.io/badge/Manuele_Pennacchio-FF6600?style=for-the-badge
