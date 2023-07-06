@@ -102,7 +102,7 @@ Per la taratura ci si è affidati al modello del sistema ricavato nella fase di 
 `N.B.` vedere cartella identificazione taratua giunto 2 PI interno per il codice utilizzato
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g2_i1.png)
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g2_i2.png)
-![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/blob/main/img/g2_e.png)
+
 
 [Badge License]: https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge
 [Badge Edoardo]: https://img.shields.io/badge/Edoardo_Mirandola-FF6600?style=for-the-badge
