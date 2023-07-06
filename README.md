@@ -55,6 +55,8 @@ Il progetto è diviso principalmente in due cartelle:
 
 ## Progetto
 il progetto consiste nella identificazione e sucessiva taratura di un controllore attraverso il modello identificato di un robot scara a 2 assi, che esegue una movimentazione di pick and place di un determinato oggetto. per la valutazionre della bonta del progetto si usa uno script ch efa variare la traettoria e il payload del robot.
+![27945-productpicture-hires-en-ls10-b702s_07](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/cbf687ad-7725-4ec1-b7af-789939c58dc9)
+
 
 ## Identificazione
 l'dentificazione è stata eseguita eccitando il giunto interessato con un sweep in frequenza "chirp" a cui si somma un segnle portante.
