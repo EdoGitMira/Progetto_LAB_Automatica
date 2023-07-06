@@ -64,9 +64,11 @@ il progetto consiste nell'identificazione e sucessiva taratura di un controllore
 
 ## Identificazione
 l'dentificazione è stata eseguita eccitando il giunto interessato con un sweep in frequenza "chirp" a cui si somma un segnle portante.
-poi tramitre algoritmi si è ricavata la risposta in frequenza del sistema e il si è ricavato il modello dell'ordine d'interesse 3° per il primo giunto e 5° per il secondo giunto.
-per verificare la correttezza dei modelli otteuti è stata eseguita una fase di validazione dove si eccita il sistema con un segnale differente si ricava il modello e lo si confronta con il modell ottenuto.
-l'identificazione è stata eseguita in closeloop recendo il controllore del giunto da indentificare poco aggressivo e per quello non sotto indagite è stato fatto un tuning in maniera tale da compensare la posizione ed avere un movimento molto piccolo per non influenzare l'identificazione dell'altro giunto si è deciso di fare una correzzione di x[Nm] in base a dove il giunto si trova.
+Tramitre appositi algoritmi si sono ricavati la risposta in frequenza del sistema e il modello dell'ordine d'interesse (3° per il primo giunto e 5° per il secondo giunto).
+Per verificare la correttezza dei modelli otteuti è stata eseguita una fase di validazione eccitando il sistema con un segnale differente. Una volta ricavato il nuovo modello lo si confronta con quello ottenuto precedentemente.
+l'identificazione è stata eseguita in closed-loop impostando:
+  - un controllore poco aggressivo per il giunto da indentificare
+  - un controllore molto aggressivo per il giunto da NON identificare. In tal modo è possibile limitare i movimenti su di esso per non influenzare l'identificazione. Tale controllore implementa un controllo principalmente proporzionale rispetto alla posizione assunta dal giunto controllato.
 `N.B.` il codice necessario è stato realizzato all'interno della cartella identificazione negli script di identificazione dei giunti
 
 ![image](https://github.com/EdoGitMira/Progetto_LAB_Automatica/assets/49036361/99c6af10-4a14-4407-a690-c2e91acf384c)
@@ -74,7 +76,7 @@ l'identificazione è stata eseguita in closeloop recendo il controllore del giun
 
 
 ## Validazione
-sono stati utilizzati dei test che permetto la verifica sia delle condizioni di starting che della condione di saturazione. Successivamente si è verifica che le classi utilizzate sia in openloop che in closeloop coincidessero con gli analoghi andamenti dei controllori fatti direttamente al'interno di script matlab.
+Sono stati utilizzati dei test che permetto la verifica sia delle condizioni di starting che della condione di saturazione. Successivamente si è verifica che le classi utilizzate sia in openloop che in closeloop coincidessero con gli analoghi andamenti dei controllori fatti direttamente al'interno di script matlab.
 `N.B.` vedere cartella debug per risulatati
 
 
