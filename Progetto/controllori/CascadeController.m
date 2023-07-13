@@ -128,11 +128,7 @@ classdef CascadeController < BaseController
             
         end
 
-        %metodo di starting per inizializzazione dei filtri e dei
-        %controllori
-        function obj = Starting(obj)
-            
-        end
+
                 
         function u = computeControlAction(obj,reference,y)
         %------------------------------------------------------------------
